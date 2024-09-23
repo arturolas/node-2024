@@ -30,7 +30,7 @@ CREATE TABLE comprobante(
 );
 
 CREATE TABLE comprobanteItem(
-	idComprobanteDetalle INT(11) PRIMARY KEY AUTO_INCREMENT,
+	idComprobanteItem INT(11) PRIMARY KEY AUTO_INCREMENT,
 	idComprobante INT(11) NOT NULL,
 	idProducto INT(11) NOT NULL,
 	nombreItem VARCHAR(200) NOT NULL,

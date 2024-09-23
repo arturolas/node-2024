@@ -12,8 +12,7 @@ export const AppDataSource = new DataSource({
     password: "",
     database: "node_arturolas",
     logging: true,
-    //entities: [ Usuario, Producto, Comprobante, ComprobanteItem],
-    entities: [ Usuario, Producto],
+    entities: [ Usuario, Producto, Comprobante, ComprobanteItem],
     synchronize: false
 
 });

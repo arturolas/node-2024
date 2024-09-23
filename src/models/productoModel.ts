@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, OneToMany, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ComprobanteItem } from "./comprobanteItemModel";
 
 @Entity('producto')
 export class Producto extends BaseEntity {
@@ -14,5 +15,8 @@ export class Producto extends BaseEntity {
 
     @Column("int", { width: 1, nullable: false })
     eliminado: number;
+
+    @OneToMany(() => ComprobanteItem, (comprobanteItem) => comprobanteItem.producto)
+    comprobanteItems: ComprobanteItem[];
 
 }

@@ -3,11 +3,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import usuarioRoutes from './routes/usuarioRoute';
 import productoRoutes from './routes/productoRoute';
-/*
-import estudiantesRoutes from './routes/estudiantesRoutes';
-import profesoresRoutes from './routes/profesoresRoutes';
-import cursosRoutes from './routes/cursosRoutes';
-*/
+import comprobanteRoutes from './routes/comprobanteRoute';
+import comprobanteItemRoutes from './routes/comprobanteItemRoute';
 
 const app = express();
 
@@ -22,9 +19,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use("/usuario", usuarioRoutes);
 app.use("/producto", productoRoutes);
-/*
-app.use("/estudiantes", estudiantesRoutes);
-app.use("/profesores", profesoresRoutes);
-app.use("/cursos", cursosRoutes);
-*/
+app.use("/comprobante", comprobanteRoutes);
+app.use("/comprobanteItem", comprobanteItemRoutes);
+
 export default app;
