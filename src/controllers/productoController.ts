@@ -67,7 +67,9 @@ class ProductoController {
                 throw new Error('Producto no encontrado');
             }
             await Producto.delete({ idProducto: Number(id) });
-            res.status(204);
+            //res.status(204);
+            res.status(200).json("Producto borrado");
+            
         } catch (err) {
             if (err instanceof Error)
 

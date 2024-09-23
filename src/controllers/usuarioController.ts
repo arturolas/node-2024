@@ -67,7 +67,9 @@ class UsuarioController {
                 throw new Error('Usuario no encontrado');
             }
             await Usuario.delete({ idUsuario: Number(id) });
-            res.status(204);
+            //res.status(204);
+            res.status(200).json("Usuario borrado");
+            
         } catch (err) {
             if (err instanceof Error)
                 res.status(500).send(err.message);
