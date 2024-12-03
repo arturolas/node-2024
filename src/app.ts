@@ -1,25 +1,43 @@
-import express, { Request, Response } from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-import usuarioRoutes from './routes/usuarioRoute';
-import productoRoutes from './routes/productoRoute';
-import comprobanteRoutes from './routes/comprobanteRoute';
-import comprobanteItemRoutes from './routes/comprobanteItemRoute';
+// app.use("/usuario", this.usuarioRoute);
+// app.use("/producto", productoRoutes);
+// app.use("/comprobante", comprobanteRoutes);
+// app.use("/comprobanteItem", comprobanteItemRoutes);
+import express from "express";
+// Routes
+import { usuarioRoute } from "./routes/usuarioRoute";
+import { enviroment } from "../.env";
 
-const app = express();
+export class App {
+  public app: express.Application = express();
+  private enviroment: enviroment = new enviroment();
 
-app.use(express.json());
-app.use(morgan('dev'));
-app.use(cors());
+  constructor(private port?: number | string) {
+    this.app = express();
+    this.middlewares();
+    this.settings();
+    this.routes();
+  }
 
-app.get('/', (req: Request, res: Response) => {
-    console.log('Hola mundo');
-    res.send("Hola mundo");
-});
+  settings() {
+    this.app.set("port", this.port || this.enviroment.PORT);
+  }
 
-app.use("/usuario", usuarioRoutes);
-app.use("/producto", productoRoutes);
-app.use("/comprobante", comprobanteRoutes);
-app.use("/comprobanteItem", comprobanteItemRoutes);
+  middlewares() {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: false }));
+  }
 
-export default app;
+  routes() {
+    this.app.use("/", express.static("output"));
+    this.app.use("/usuario", new usuarioRoute().router);
+  }
+
+  routers(): Array<express.Router> {
+    return [new usuarioRoute().router];
+  }
+
+  async listen() {
+    this.app.listen(this.app.get("port"));
+    console.log(`server started at http://localhost:${this.app.get("port")}`);
+  }
+}

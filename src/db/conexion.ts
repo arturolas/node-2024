@@ -5,14 +5,13 @@ import { Comprobante } from "../models/comprobanteModel";
 import { ComprobanteItem } from "../models/comprobanteItemModel";
 
 export const AppDataSource = new DataSource({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "",
-    database: "node_arturolas",
-    logging: true,
-    entities: [ Usuario, Producto, Comprobante, ComprobanteItem],
-    synchronize: false
-
+  type: "mysql",
+  host: "localhost",
+  port: 3306,
+  username: "root",
+  password: "123123",
+  database: "node_arturolas",
+  logging: true,
+  entities: [Usuario, Producto, Comprobante, ComprobanteItem],
+  synchronize: false,
 });

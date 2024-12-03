@@ -1,80 +1,55 @@
 import { Request, Response } from "express";
-import { Usuario } from "../models/usuarioModel";
+import { UsuarioServiceImpl } from "../serviceImpl/usuarioServiceImpl";
+import { HttpResponse } from "../shared/http.response";
 
+export class UsuarioController {
+  constructor(
+    private usuarioServiceImpl: UsuarioServiceImpl = new UsuarioServiceImpl(),
+    private httpResponse: HttpResponse = new HttpResponse()
+  ) {}
 
-class UsuarioController {
-    constructor() {
-
+  async consultar(res: Response) {
+    try {
+      const data = await this.usuarioServiceImpl.getAll();
+      return this.httpResponse.Ok(res, data);
+    } catch (e) {
+      return this.httpResponse.Error(res, e);
     }
+  }
 
-    async consultar(req: Request, res: Response) {
-        try {
-            const data = await Usuario.find();
-            res.status(200).json(data);
-        } catch (err) {
-            if (err instanceof Error)
-                res.status(500).send(err.message);
-        }
-
+  async consultarDetalle(req: Request, res: Response) {
+    try {
+      const data = await this.usuarioServiceImpl.findOneBy(req);
+      return this.httpResponse.Ok(res, data);
+    } catch (e) {
+      return this.httpResponse.NotFoundRecord(res, e);
     }
+  }
 
-    async consultarDetalle(req: Request, res: Response) {
-        const { id } = req.params;
-        try {
-            const registro = await Usuario.findOneBy({ idUsuario: Number(id) });
-            if (!registro) {
-                throw new Error('Usuario no encontrado');
-            }
-
-            res.status(200).json(registro);
-        } catch (err) {
-            if (err instanceof Error)
-                res.status(500).send(err.message);
-        }
+  async ingresar(req: Request, res: Response) {
+    try {
+      const data = await this.usuarioServiceImpl.save(req);
+      return this.httpResponse.Ok(res, data);
+    } catch (e) {
+      return this.httpResponse.Error(res, e);
     }
+  }
 
-    async ingresar(req: Request, res: Response) {
-        try {
-            const registro = await Usuario.save(req.body);
-            res.status(201).json(registro);
-        } catch (err) {
-            if (err instanceof Error)
-                res.status(500).send(err.message);
-        }
+  async actualizar(req: Request, res: Response) {
+    try {
+      const data = await this.usuarioServiceImpl.update(req);
+      return this.httpResponse.Ok(res, data);
+    } catch (e) {
+      return this.httpResponse.NotFoundRecord(res, e);
     }
+  }
 
-    async actualizar(req: Request, res: Response) {
-        const { id } = req.params;
-        try {
-            const registro = await Usuario.findOneBy({ idUsuario: Number(id) });
-            if (!registro) {
-                throw new Error('Usuario no encontrado');
-            }
-            await Usuario.update({ idUsuario: Number(id) }, req.body);
-            const registroActualizado = await Usuario.findOneBy({ idUsuario: Number(id) });
-            res.status(200).json(registroActualizado);
-        } catch (err) {
-            if (err instanceof Error)
-                res.status(500).send(err.message);
-        }
+  async borrar(req: Request, res: Response) {
+    try {
+      const data = await this.usuarioServiceImpl.delete(req);
+      return this.httpResponse.Ok(res, data);
+    } catch (e) {
+      return this.httpResponse.NotFoundRecord(res, e);
     }
-
-    async borrar(req: Request, res: Response) {
-        const { id } = req.params;
-        try {
-            const registro = await Usuario.findOneBy({ idUsuario: Number(id) });
-            if (!registro) {
-                throw new Error('Usuario no encontrado');
-            }
-            await Usuario.delete({ idUsuario: Number(id) });
-            //res.status(204);
-            res.status(200).json("Usuario borrado");
-            
-        } catch (err) {
-            if (err instanceof Error)
-                res.status(500).send(err.message);
-        }
-    }
+  }
 }
-
-export default new UsuarioController();
