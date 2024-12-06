@@ -11,10 +11,10 @@ export class Connection {
   constructor() {
     this.dataSource = new DataSource({
       type: "mysql",
-      host: process.env.HOST,
+      host: process.env.HOST_DB,
       port: 3306,
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
+      username: process.env.USERNAME_DB,
+      password: process.env.PASSWORD_DB,
       database: process.env.DB,
       logging: true,
       entities: [Usuario, Producto, Comprobante, ComprobanteItem],

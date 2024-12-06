@@ -1,6 +1,8 @@
 import express from "express";
 import { UsuarioRouter } from "@routers/UsuarioRouter";
+import { ComprobanteRouter } from "@routers/ComprobanteRouter";
 import * as dotenv from "dotenv";
+import { Comprobante } from "../../../domain/entities/Comprobante";
 dotenv.config();
 
 export class App {
@@ -26,10 +28,11 @@ export class App {
   routes() {
     this.app.use("/", express.static("output"));
     this.app.use("/usuario", new UsuarioRouter().router);
+    this.app.use("/comprobante", new ComprobanteRouter().router);
   }
 
   routers(): Array<express.Router> {
-    return [new UsuarioRouter().router];
+    return [new UsuarioRouter().router, new ComprobanteRouter().router];
   }
 
   async listen() {

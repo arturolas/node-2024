@@ -1,15 +1,10 @@
 import {
   BaseEntity,
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  OneToMany,
-  ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  OneToOne,
 } from "typeorm";
 import { Usuario } from "@entities/Usuario";
 import { ComprobanteItem } from "@entities/ComprobanteItem";
@@ -22,14 +17,10 @@ export class Comprobante extends BaseEntity {
   @Column("int", { width: 11, nullable: false })
   idUsuario: number;
 
-  //@Column({ type: 'timestamptz' })
-  // @Column()
-  @Column('text',{nullable:true})
+  @Column("date", { nullable: false })
   fechaCreacion: Date;
 
-  //@Column({ type: 'timestamptz' })
-  // @Column()
-  @Column('text',{nullable:true})
+  @Column("date", { nullable: false })
   fechaCierre: Date;
 
   @Column("decimal", { precision: 12, scale: 4, nullable: false })
@@ -38,13 +29,7 @@ export class Comprobante extends BaseEntity {
   @Column("int", { width: 1, nullable: false })
   eliminado: number;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.comprobantes)
+  @OneToOne(() => Usuario, (usuario) => usuario.comprobantes)
   @JoinColumn({ name: "idUsuario" })
   usuario: Usuario;
-
-  @OneToMany(
-    () => ComprobanteItem,
-    (comprobanteItem) => comprobanteItem.comprobante
-  )
-  comprobanteItems: ComprobanteItem[];
 }
