@@ -1,0 +1,363 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API RESTful de una tienda online",
+    "version": "1.0.0",
+    "description": "API para gestionar productos, clientes, comprobantes y comprobantes items",
+    "contact": {
+      "email": "arturolas@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:6505/",
+      "description": "API of test"
+    }
+  ],
+  "paths": {
+    "/autenticacion": {
+      "post": {
+        "summary": "Iniciar sesión de usuario",
+        "description": "This route will be responsible for starting the session and generating the token.",
+        "tags": ["Autenticacion"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "correo": "arturo@email.com",
+                    "password": "123123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": { "error": "User already exists." },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "statusCode": 404,
+                    "statusMsg": "Not Found",
+                    "message": {
+                      "error": "Correo o password incorrecto."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "statusMsg": "Success",
+                  "data": {
+                    "idUsuario": 1,
+                    "nombre": "ARTURO",
+                    "genero": "H",
+                    "correo": "arturo@email.com",
+                    "password": "$2a$10$I1wSHx01jmRo.vO4L5Z8ee4E34Y.N78TYG.cOUZJOo5aKrlsPZiEG",
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM5NDA5MzgsImV4cCI6MTczMzk0NDUzOCwic3ViIjoiMSJ9.JNXb91L_zjJmBvbXPdkrkV-JImEIkK2rTGoI6K8LBqE",
+                    "eliminado": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario": {
+      "get": {
+        "summary": "Obtener todo los usuarios",
+        "description": "Esta ruta será la encargada de obtener todos los usuarios registrados.",
+        "tags": ["Usuario"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "500": {
+            "description": "No user found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "statusCode": 500,
+                    "statusMsg": "Internal Error",
+                    "message": ""
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": [
+                    {
+                      "statusCode": 200,
+                      "statusMsg": "Success",
+                      "data": [
+                        {
+                          "idUsuario": 1,
+                          "nombre": "ARTURO",
+                          "genero": "H",
+                          "correo": "arturo@email.com",
+                          "password": "$2a$10$I1wSHx01jmRo.vO4L5Z8ee4E34Y.N78TYG.cOUZJOo5aKrlsPZiEG",
+                          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM5NDkxMDMsImV4cCI6MTczMzk1MjcwMywic3ViIjoiMSJ9.DrHcZ_F8uReM50KkMhRXRIW5tFIUhkG6R7nLtz9fTB0",
+                          "eliminado": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Registrar Usuario",
+        "description": "Esta ruta será la encargada de registrar a usuarios nuevos.",
+        "tags": ["Usuario"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "user": {
+                  "value": {
+                    "nombre": "Elanchipa",
+                    "genero": "H",
+                    "correo": "demo@gmail.com",
+                    "password": "123123",
+                    "eliminado": "0"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": { "error": "User already exists." },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "User already exists."
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "statusCode": 200,
+                    "statusMsg": "Success",
+                    "data": {
+                      "nombre": "Elanchipa",
+                      "genero": "H",
+                      "correo": "demo@gmail.com",
+                      "password": "123123",
+                      "eliminado": "0",
+                      "token": null,
+                      "idUsuario": 7
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario/{id}": {
+      "put": {
+        "summary": "Update user",
+        "description": "This route will responsible for to do the update a user",
+        "tags": ["Usuario"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's id for update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {},
+              "examples": {
+                "user": {
+                  "value": {
+                    "nombre": "Deivison Isidoro"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "statusCode": 404,
+                    "statusMsg": "Not Found",
+                    "message": "No se encontro el usuario"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "statusCode": 500,
+                    "statusMsg": "Internal Error",
+                    "message": ""
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "statusCode": 201,
+                    "statusMsg": "Success",
+                    "data": {
+                      "status": true,
+                      "data": {
+                        "idUsuario": 1,
+                        "nombre": "Arturo 123",
+                        "genero": "H",
+                        "correo": "arturo@email.com",
+                        "password": "$2a$10$I1wSHx01jmRo.vO4L5Z8ee4E34Y.N78TYG.cOUZJOo5aKrlsPZiEG",
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM5NTA5OTksImV4cCI6MTczMzk1NDU5OSwic3ViIjoiMSJ9.G28ic7TjJGB2c0Js7vhJEEf-Q7UPnQF1lZ9TDtIhCjo",
+                        "eliminado": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user",
+        "description": "This route will responsible for to do the delete a user",
+        "tags": ["Usuario"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User's id for delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "User does not exits!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "User does not exits!"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

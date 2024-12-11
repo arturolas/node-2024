@@ -4,6 +4,7 @@ import { ComprobanteRouter } from "@routers/ComprobanteRouter";
 import { ProductoRouter } from "@routers/ProductoRouter";
 import { AutenticacionRouter } from "@routers/AutenticacionRouter";
 import * as dotenv from "dotenv";
+import { documentsRoutes } from '../settings/swagger'
 
 dotenv.config();
 
@@ -28,7 +29,8 @@ export class App {
   }
 
   routes() {
-    this.app.use("/", express.static("output"));
+    // this.app.use("/", express.static("output"));
+    this.app.use("/", documentsRoutes);
     this.app.use("/usuario", new UsuarioRouter().router);
     this.app.use("/comprobante", new ComprobanteRouter().router);
     this.app.use("/producto", new ProductoRouter().router);

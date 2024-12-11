@@ -51,7 +51,7 @@ export class UsuarioUserCase implements IUsuarioRepository {
   }
   async Eliminar(req: Request): Promise<ResponseDTO> {
     const { id } = req.params;
-    await Usuario.update({ idUsuario: Number(id) }, { eliminado: 0 });
+    await Usuario.update({ idUsuario: Number(id) }, { eliminado: 1 });
     return await this.UsuarioDetalle(req);
   }
 }
