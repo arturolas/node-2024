@@ -19,16 +19,18 @@ export class Usuario extends BaseEntity {
   idUsuario: number;
 
   @Column("varchar", { length: 200, nullable: false })
-  nombre: String;
+  nombre: string;
 
   @Column("varchar", { length: 2, nullable: false })
-  genero: String;
+  genero: string;
 
   @Column("varchar", { length: 100, nullable: false })
-  correo: String;
+  correo: string;
 
   @Column("varchar", { length: 250, nullable: false })
-  password: String;
+  password: string;
+  @Column("mediumtext", { nullable: true })
+  token: string;
 
   @Column("int", { width: 1, nullable: false })
   eliminado: number;

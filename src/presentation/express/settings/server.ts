@@ -2,7 +2,7 @@ import { Connection } from "@database/Connection";
 import { App } from "@settings/app";
 
 async function main() {
-  const dbConnection = new Connection();//DatabaseConnection.getInstance();
+  const dbConnection = new Connection();
   try {
     await dbConnection.initialize();
     const app = new App();

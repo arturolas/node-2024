@@ -31,11 +31,13 @@
       "@implementations/*": ["src/app/implementations/*"], // Alias para implementations
       "@dtos/*": ["src/domain/dtos/*"], // Alias para dtos
       "@entities/*": ["src/domain/entities/*"], // Alias para entities
+      "@enums/*": ["src/domain/enums/*"], // Alias para connection
       "@database/*": ["src/infra/database/*"], // Alias para database
       "@routers/*": ["src/presentation/express/routers/*"], // Alias para routers
       "@settings/*": ["src/presentation/express/settings/*"], // Alias para settings
       "@controllers/*": ["src/presentation/http/controllers/*"], // Alias para controllers
-      "@helpers/*": ["src/presentation/http/helpers/*"] // Alias para connection
+      "@helpers/*": ["src/presentation/http/helpers/*"], // Alias para helpers
+      "@https/*": ["src/presentation/http/helpers/implementations/*"] // Alias para https
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

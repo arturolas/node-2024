@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { HttpSuccess } from "../helpers/implementations/HttpSuccess";
-import { HttpErrors } from "../helpers/implementations/HttpErrors";
+import { HttpSuccess } from "@https/HttpSuccess";
+import { HttpErrors } from "@https/HttpErrors";
 import { ComprobanteUserCase } from "@implementations/Comprobante";
+import { ComprobanteErrorType } from "@enums/Comprobante/ErrorType";
 
 export class ComprobanteController {
   constructor(
@@ -12,7 +13,7 @@ export class ComprobanteController {
 
   async Listar(res: Response) {
     try {
-      const data = await this.comprobanteUserCase.Listar();
+      const { data } = await this.comprobanteUserCase.Listar();
       return this.httpSuccess.success_200(res, data);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
@@ -20,11 +21,12 @@ export class ComprobanteController {
   }
   async Detalle(req: Request, res: Response) {
     try {
-      const data = await this.comprobanteUserCase.ComprobanteDetalle(req);
-      console.log(typeof data);
-      return Object.keys(data).length === 0
-        ? this.httpErrors.error_404(res, "No se ha encontrado registro")
-        : this.httpSuccess.success_201(res, data);
+      const { status } = await this.comprobanteUserCase.ComprobanteDetalle(req);
+      if (!status)
+        return this.httpErrors.error_404(
+          res,
+          ComprobanteErrorType.ComprobanteNoEncontrado
+        );
     } catch (e) {
       return this.httpErrors.error_500(res, e);
     }
@@ -41,12 +43,14 @@ export class ComprobanteController {
 
   async Actualizar(req: Request, res: Response) {
     try {
-      const ComprobanteDetalle =
-        await this.comprobanteUserCase.ComprobanteDetalle(req);
-      if (Object.keys(ComprobanteDetalle).length === 0)
-        return this.httpErrors.error_404(res, "No se ha encontrado registro");
+      const { status } = await this.comprobanteUserCase.ComprobanteDetalle(req);
+      if (!status)
+        return this.httpErrors.error_404(
+          res,
+          ComprobanteErrorType.ComprobanteNoEncontrado
+        );
 
-      const data = await this.comprobanteUserCase.Actualizar(req);
+      const { data } = await this.comprobanteUserCase.Actualizar(req);
       return this.httpSuccess.success_201(res, data);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
@@ -55,11 +59,13 @@ export class ComprobanteController {
 
   async Eliminar(req: Request, res: Response) {
     try {
-      const ComprobanteDetalle =
-        await this.comprobanteUserCase.ComprobanteDetalle(req);
+      const { status } = await this.comprobanteUserCase.ComprobanteDetalle(req);
 
-      if (Object.keys(ComprobanteDetalle).length === 0)
-        return this.httpErrors.error_404(res, "No se ha encontrado registro");
+      if (!status)
+        return this.httpErrors.error_404(
+          res,
+          ComprobanteErrorType.ComprobanteNoEncontrado
+        );
 
       const data = await this.comprobanteUserCase.Eliminar(req);
       return this.httpSuccess.success_201(res, data);

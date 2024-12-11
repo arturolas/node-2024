@@ -19,7 +19,7 @@ export class Producto extends BaseEntity {
   idProducto: number;
 
   @Column("varchar", { length: 200, nullable: false })
-  nombre: String;
+  nombre: string;
 
   @Column("decimal", { precision: 12, scale: 4, nullable: false })
   precio: number;

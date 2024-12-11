@@ -1,22 +1,18 @@
 export interface IUsuario {
   idUsuario: number;
-  nombre: String;
-  genero: String;
-  correo: String;
-  password: String;
+  nombre: string;
+  genero: string;
+  correo: string;
+  password?: string;
+  token?: string;
   eliminado: number;
 }
-export interface IActualizarUsuario {
-  nombre: String;
-  genero: String;
-  correo: String;
-  password: String;
-  eliminado: number;
-}
-export interface IRegistrarUsuario {
-  nombre: String;
-  genero: String;
-  correo: String;
-  password: String;
-  eliminado: number;
+export interface IUserUpdateDTO {
+  idUsuario: number;
+  nombre?: string;
+  genero?: string;
+  correo?: string;
+  password?: string;
+  token?: string;
+  eliminado?: number;
 }

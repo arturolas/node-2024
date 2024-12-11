@@ -1,32 +1,36 @@
 import { Request, Response } from "express";
 import { IComprobanteRepository } from "@repositories/Comprobante";
-import { IComprobante, IRegistrarComprobante } from "@dtos/Comprobante";
 import { Comprobante } from "@entities/Comprobante";
+import { ResponseDTO } from "@dtos/Response";
 
 export class ComprobanteUserCase implements IComprobanteRepository {
-  async Listar(): Promise<IComprobante[]> {
+  async Listar(): Promise<ResponseDTO> {
     const users = await Comprobante.find({
       relations: ["usuario"],
     });
-    return users;
+    return { status: true, data: users };
   }
-  async Registrar(req: Request): Promise<IRegistrarComprobante> {
-    return await Comprobante.save(req.body);
+  async Registrar(req: Request): Promise<ResponseDTO> {
+    const user = await Comprobante.save(req.body);
+    return { status: true, data: user };
   }
-  async ComprobanteDetalle(req: Request): Promise<IComprobante> {
+  async ComprobanteDetalle(req: Request): Promise<ResponseDTO> {
     const { id } = req.params;
-    const data = await Comprobante.findOneBy({ idComprobante: Number(id) });
-    if (data) return data;
-    return new Comprobante();
+    const comprobanteExiste = (await Comprobante.findOneBy({
+      idComprobante: Number(id),
+    })) as Comprobante | unknown;
+    if (!comprobanteExiste) return { status: false, data: comprobanteExiste };
+    return { status: true, data: comprobanteExiste };
   }
-  async Actualizar(req: Request): Promise<IComprobante> {
+  async Actualizar(req: Request): Promise<ResponseDTO> {
     const { id } = req.params;
     await Comprobante.update({ idComprobante: Number(id) }, { ...req.body });
     return await this.ComprobanteDetalle(req);
   }
-  async Eliminar(req: Request): Promise<IComprobante> {
+  async Eliminar(req: Request): Promise<ResponseDTO> {
     const { id } = req.params;
     await Comprobante.update({ idComprobante: Number(id) }, { eliminado: 0 });
-    return await this.ComprobanteDetalle(req);
+    const comprobante = await this.ComprobanteDetalle(req);
+    return { status: true, data: comprobante };
   }
 }

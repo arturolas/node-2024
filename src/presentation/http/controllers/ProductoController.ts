@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
 import { HttpSuccess } from "@https/HttpSuccess";
 import { HttpErrors } from "@https/HttpErrors";
-import { UsuarioUserCase } from "@implementations/Usuario";
-import { UsuarioErrorType } from "@enums/Usuario/ErrorType";
+import { ProductoUserCase } from "@implementations/Producto";
+import { ProductoErrorType } from "@enums/Producto/ErrorType";
 
-export class UsuarioController {
+export class ProductoController {
   constructor(
-    private usuarioUserCase: UsuarioUserCase = new UsuarioUserCase(),
+    private productoUserCase: ProductoUserCase = new ProductoUserCase(),
     private httpSuccess: HttpSuccess = new HttpSuccess(),
     private httpErrors: HttpErrors = new HttpErrors()
   ) {}
 
   async Listar(res: Response) {
     try {
-      const { data } = await this.usuarioUserCase.Listar();
+      const { data } = await this.productoUserCase.Listar();
       return this.httpSuccess.success_200(res, data);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
@@ -21,9 +21,9 @@ export class UsuarioController {
   }
   async Detalle(req: Request, res: Response) {
     try {
-      const { status, data } = await this.usuarioUserCase.UsuarioDetalle(req);
+      const { status, data } = await this.productoUserCase.ProductoDetalle(req);
       return !status
-        ? this.httpErrors.error_404(res, UsuarioErrorType.UsuarioNoEncontrado)
+        ? this.httpErrors.error_404(res, ProductoErrorType.ProductoNoEncontrado)
         : this.httpSuccess.success_201(res, data);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
@@ -32,7 +32,7 @@ export class UsuarioController {
 
   async Registrar(req: Request, res: Response) {
     try {
-      const { data } = await this.usuarioUserCase.Registrar(req);
+      const { data } = await this.productoUserCase.Registrar(req);
       return this.httpSuccess.success_200(res, data);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
@@ -41,13 +41,13 @@ export class UsuarioController {
 
   async Actualizar(req: Request, res: Response) {
     try {
-      const { status } = await this.usuarioUserCase.UsuarioDetalle(req);
+      const { status } = await this.productoUserCase.ProductoDetalle(req);
       if (!status)
         return this.httpErrors.error_404(
           res,
-          UsuarioErrorType.UsuarioNoEncontrado
+          ProductoErrorType.ProductoNoEncontrado
         );
-      const { data } = await this.usuarioUserCase.Actualizar(req);
+      const { data } = await this.productoUserCase.Actualizar(req);
       return this.httpSuccess.success_201(res, data);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
@@ -56,14 +56,14 @@ export class UsuarioController {
 
   async Eliminar(req: Request, res: Response) {
     try {
-      const { status } = await this.usuarioUserCase.UsuarioDetalle(req);
-
+      const { status } = await this.productoUserCase.ProductoDetalle(req);
       if (!status)
         return this.httpErrors.error_404(
           res,
-          UsuarioErrorType.UsuarioNoEncontrado
+          ProductoErrorType.ProductoNoEncontrado
         );
-      await this.usuarioUserCase.Eliminar(req);
+
+      await this.productoUserCase.Eliminar(req);
       return this.httpSuccess.success_201(res);
     } catch (e) {
       return this.httpErrors.error_500(res, e);
